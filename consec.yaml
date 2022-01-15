@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: springconf
+data:
+  mongouser: devdb
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: springsec
+stringData:
+   mongopass: devdb@123
+type: Opaque

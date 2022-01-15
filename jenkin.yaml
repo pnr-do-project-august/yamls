@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: jenkins
+spec:
+  selector:
+    matchLabels:
+      app: jenkins
+  template:
+    metadata:
+      labels:
+        app: jenkins
+    spec:
+      containers:
+      - name: jenkin
+        image: jenkins/jenkins:lts
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "200m"
+        ports:
+        - containerPort: 8080
+        volumeMounts:
+          - name:  jenkinvol
+            mountPath:  /var/jenkins_home
+      volumes:
+        - name:  jenkinvol
+          persistentVolumeClaim:
+            claimName: jenkinpvc
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: jenkinpvc
+spec:
+  storageClassName: nfs-storageclass
+  resources:
+    requests:
+      storage: 512Mi
+  accessModes:
+  - ReadWriteMany
+
+
